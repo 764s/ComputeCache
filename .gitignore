@@ -104,3 +104,10 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# ===== ComputeCache 纯 C# 源码与无头运行入口 =====
+# 忽略任意层级的构建产物（Unity 默认规则仅锚定根目录）。
+[Bb]in/
+[Oo]bj/
+# 无头运行入口的工程文件非 Unity 自动生成，需纳入版本控制。
+!src/ComputeCache.Headless/ComputeCache.Headless.csproj
