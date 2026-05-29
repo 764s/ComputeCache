@@ -19,6 +19,11 @@ namespace ComputeCache
         // bank 创建序号，用于错开各 bank 的 version 初值（回绕点）。
         private int _bankSeedIndex;
 
+        // version 初值扰动：CurrentVersion_init = (bankSeedIndex * 37) % 255 + 1，恒 ≥ 1。
+        // 37 与 255 互质，使各 bank 的回绕点错开，避免一次 Invalidate 多 bank 集体 Array.Clear 的尖峰。
+        private const int BankSeedMultiplier = 37;
+        private const int MaxVersionValue = 255;
+
         public CacheMemory()
         {
         }
@@ -40,7 +45,7 @@ namespace ComputeCache
                     Data[b] = SlotArray.Create(b, req);
                     Versions[b] = new byte[req];
                     Counts[b] = new int[req];
-                    int seed = (_bankSeedIndex * 37) % 255 + 1; // 恒 ≥ 1
+                    int seed = (_bankSeedIndex * BankSeedMultiplier) % MaxVersionValue + 1; // 恒 ≥ 1
                     _bankSeedIndex++;
                     Current[b] = (byte)seed;
                 }
@@ -62,7 +67,7 @@ namespace ComputeCache
             {
                 if (Data[b] == null) continue;
                 byte cur = Current[b];
-                if (cur == 255)
+                if (cur == MaxVersionValue)
                 {
                     // 回绕：清空该 bank version，重置为 1，避免与残留值假命中。
                     Array.Clear(Versions[b], 0, Versions[b].Length);
