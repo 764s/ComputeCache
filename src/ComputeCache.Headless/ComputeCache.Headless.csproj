@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 无头薄入口：仅用于编译运行核心库 + 测试 + 基准。LangVersion 锁定 9 与 Unity 侧一致。 -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>ComputeCache.Headless</AssemblyName>
+    <RootNamespace>ComputeCache.Headless</RootNamespace>
+  </PropertyGroup>
+
+  <!-- 直接编译纯 C# 核心 + 测试源码（库与测试同一编译单元）。 -->
+  <ItemGroup>
+    <Compile Include="..\ComputeCache\**\*.cs" />
+  </ItemGroup>
+
+</Project>
